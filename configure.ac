@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([File Sender], [0.0.1], [pashev.igor@gmai.com])
+AC_INIT([File Sender], [0.0.1], [pashev.igor@gmail.com])
 AM_INIT_AUTOMAKE([dist-xz foreign])
 AC_CONFIG_SRCDIR([server.c])
 AC_CONFIG_HEADERS([config.h])
