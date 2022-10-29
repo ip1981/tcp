@@ -35,9 +35,7 @@ send_file (int fd, const char *filename)
   off_t dummy = 0;              /* specially for Solaris (it crashes if sendfile's 3rd arg is NULL).  */
   int sfd = open (filename, O_RDONLY);
   if (sfd < 0)
-    {
-      fatal ("cannot read `%s'", filename);
-    }
+    fatal ("cannot read `%s'", filename);
 
   struct stat st;
   if (!fstat (sfd, &st))
@@ -48,28 +46,18 @@ send_file (int fd, const char *filename)
       size_t filename_len = strlen (name) + 1;
       rc = write (fd, name, filename_len);      /* filename\0payload  */
       if (rc != filename_len)
-        {
-          fatal ("failed to write filename");
-        }
+        fatal ("failed to write filename");
       rc = sendfile (fd, sfd, &dummy, st.st_size);
       if (rc < 0)
-        {
-          fatal ("failed to send file `%s'", filename);
-        }
+        fatal ("failed to send file `%s'", filename);
       else if (rc != st.st_size)
-        {
-          warning ("sent only %d of %d bytes of file `%s'", rc,
-                   st.st_size, filename);
-        }
+        warning ("sent only %d of %d bytes of file `%s'", rc,
+                 st.st_size, filename);
       else
-        {
-          info ("sent %d bytes of `%s'", rc, filename);
-        }
+        info ("sent %d bytes of `%s'", rc, filename);
     }
   else
-    {
-      fatal ("failed to stat `%s'", filename);
-    }
+    fatal ("failed to stat `%s'", filename);
 
   (void) close (sfd);
 }
@@ -108,9 +96,7 @@ main (int argc, char **argv)
 
   rc = getaddrinfo (host, port, &hints, &result);
   if (0 != rc)
-    {
-      fatal ("getaddrinfo() failed");
-    }
+    fatal ("getaddrinfo() failed");
   for (rp = result; rp != NULL; rp = rp->ai_next)
     {
       fd = socket (rp->ai_family, rp->ai_socktype, rp->ai_protocol);
@@ -125,9 +111,7 @@ main (int argc, char **argv)
   freeaddrinfo (result);
 
   if (rp == NULL)
-    {
-      fatal ("failed to connect");
-    }
+    fatal ("failed to connect");
 
   send_file (fd, argv[2]);
 

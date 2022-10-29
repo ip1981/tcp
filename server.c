@@ -98,9 +98,7 @@ clean:
   if (dfd > 0)
     {
       if (close (dfd))
-        {
-          warning ("failed to close %d", dfd);
-        }
+        warning ("failed to close %d", dfd);
     }
 }
 
@@ -117,15 +115,11 @@ main (int argc, char **argv)
   progname = argv[0];
 
   if (chdir (basedir))
-    {
-      fatal ("failed to change directory to `%s'", basedir);
-    }
+    fatal ("failed to change directory to `%s'", basedir);
 
   listen_fd = socket (AF_INET, SOCK_STREAM, 0);
   if (listen_fd < 0)
-    {
-      fatal ("failed to create listen socket");
-    }
+    fatal ("failed to create listen socket");
 
   memset (&servaddr, 0, sizeof (servaddr));
   servaddr.sin_family = AF_INET;
@@ -135,15 +129,11 @@ main (int argc, char **argv)
   rc = bind (listen_fd, (const struct sockaddr *) &servaddr,
              sizeof (servaddr));
   if (0 != rc)
-    {
-      fatal ("failed to bind listen socket");
-    }
+    fatal ("failed to bind listen socket");
 
   rc = listen (listen_fd, listen_queue);
   if (0 != rc)
-    {
-      fatal ("failed to plug listen socket");
-    }
+    fatal ("failed to plug listen socket");
 
   info ("accepting connections on port %d", port);
   info ("will save files under `%s'", basedir);
