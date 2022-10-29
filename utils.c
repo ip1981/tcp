@@ -18,7 +18,7 @@ info_va (const char *msg, va_list va)
 {
   fprintf (stderr, "%s: ", progname);
   vfprintf (stderr, msg, va);
-  fputs ("", stderr);
+  fputs ("\n", stderr);
 }
 
 void
@@ -40,7 +40,7 @@ warning_va (const char *msg, va_list va)
     {
       fprintf (stderr, ": %s", strerror (errno));
     }
-  fputs ("", stderr);
+  fputs ("\n", stderr);
 }
 
 void
@@ -62,7 +62,7 @@ fatal_va (const char *msg, va_list va)
     {
       fprintf (stderr, ": %s", strerror (errno));
     }
-  fputs ("", stderr);
+  fputs ("\n", stderr);
 }
 
 void
