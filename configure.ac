@@ -8,7 +8,7 @@ AC_CONFIG_SRCDIR([server.c])
 AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.
-AC_PROG_CC_C99
+AC_PROG_CC
 AC_USE_SYSTEM_EXTENSIONS
 
 # Checks for libraries.
