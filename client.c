@@ -19,7 +19,7 @@
 #include "utils.h"
 
 const char *progname = NULL;
-char *port = "1234";
+const char *port = "1234";
 
 static void
 usage ()
@@ -43,7 +43,7 @@ send_file (int fd, const char *filename)
       ssize_t rc;
       info ("sending `%s'", filename);
       const char *name = basename ((char *) filename);
-      size_t filename_len = strlen (name) + 1;
+      ssize_t filename_len = strlen (name) + 1;
       rc = write (fd, name, filename_len);      /* filename\0payload  */
       if (rc != filename_len)
         fatal ("failed to write filename");

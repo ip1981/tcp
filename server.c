@@ -32,7 +32,10 @@ recvfile (int fd)
   char *filename = NULL;
   size_t filename_len;
   off_t filelength = 0;
-  char *buf = malloc (PATH_MAX);
+  char *payload_start;
+  ssize_t rest_len;
+
+  char *buf = (char *) malloc (PATH_MAX);
   if (!buf)
     {
       warning ("failed to allocate space");
@@ -69,8 +72,8 @@ recvfile (int fd)
       goto clean;
     }
 
-  char *payload_start = buf + filename_len + 1;
-  ssize_t rest_len = rc - filename_len - 1;
+  payload_start = buf + filename_len + 1;
+  rest_len = rc - filename_len - 1;
   rc = write (dfd, payload_start, rest_len);    /* write the rest of buf.  */
   if (rc != rest_len)
     {
