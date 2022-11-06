@@ -19,13 +19,19 @@ AC_CHECK_HEADERS([fcntl.h netinet/in.h stddef.h stdlib.h string.h sys/socket.h u
 # Checks for typedefs, structures, and compiler characteristics.
 AC_TYPE_SIZE_T
 AC_TYPE_SSIZE_T
-AC_CHECK_TYPES([ptrdiff_t])
+AC_CHECK_MEMBERS([struct sf_hdtr.hdr_cnt], [], [],
+[
+#ifdef HAVE_SYS_SOCKET_H
+#include <sys/socket.h>
+#endif
+])
 
 # Checks for library functions.
 AC_FUNC_MALLOC
-AC_CHECK_FUNCS([memset strerror])
+AC_CHECK_FUNCS([memset sendfile strerror])
 AC_SEARCH_LIBS([socket], [socket])
 AC_SEARCH_LIBS([sendfile], [sendfile])
 
-AC_OUTPUT([Makefile])
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT()
 

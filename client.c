@@ -10,11 +10,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/sendfile.h>
 #include <sys/socket.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
+
+#ifdef HAVE_SYS_SENDFILE_H
+#include <sys/sendfile.h>
+#endif
 
 #include "utils.h"
 
@@ -29,10 +32,31 @@ usage ()
   printf ("Default port is %s\n", port);
 }
 
+static ssize_t
+transmit (int fd, int sfd, size_t size)
+{
+#if HAVE_SENDFILE
+#if HAVE_STRUCT_SF_HDTR_HDR_CNT
+  int rc;
+  off_t sbytes;
+  rc = sendfile (sfd, fd, 0, size, (struct sf_hdtr *) NULL, &sbytes, 0);
+  if (rc < 0)
+    return rc;
+  return sbytes;
+#else
+  int rc;
+  off_t dummy = 0;              /* specially for Solaris (it crashes if sendfile's 3rd arg is NULL).  */
+  rc = sendfile (fd, sfd, &dummy, size);
+  return rc;
+#endif
+#else /* no HAVE_SENDFILE  */
+#error need sendfile()
+#endif
+}
+
 static void
 send_file (int fd, const char *filename)
 {
-  off_t dummy = 0;              /* specially for Solaris (it crashes if sendfile's 3rd arg is NULL).  */
   int sfd = open (filename, O_RDONLY);
   if (sfd < 0)
     fatal ("cannot read `%s'", filename);
@@ -47,7 +71,7 @@ send_file (int fd, const char *filename)
       rc = write (fd, name, filename_len);      /* filename\0payload  */
       if (rc != filename_len)
         fatal ("failed to write filename");
-      rc = sendfile (fd, sfd, &dummy, st.st_size);
+      rc = transmit (fd, sfd, st.st_size);
       if (rc < 0)
         fatal ("failed to send file `%s'", filename);
       else if (rc != st.st_size)
