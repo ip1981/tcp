@@ -28,9 +28,9 @@ AC_CHECK_MEMBERS([struct sf_hdtr.hdr_cnt], [], [],
 
 # Checks for library functions.
 AC_FUNC_MALLOC
-AC_CHECK_FUNCS([memset sendfile strerror])
 AC_SEARCH_LIBS([socket], [socket])
 AC_SEARCH_LIBS([sendfile], [sendfile])
+AC_CHECK_FUNCS([memset sendfile strerror])
 
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT()
