@@ -91,6 +91,10 @@ recvfile (int fd)
         }
       filelength += rc;
     }
+
+  if (rc < 0)
+    warning ("failed to read from the socket");
+
   info ("received %lu of `%s'", filelength, filename);
 
 clean:
