@@ -54,6 +54,12 @@ recvfile (int fd)
       goto clean;
     }
 
+  if (!memchr (buf, 0, PATH_MAX))
+    {
+      warning ("filename is too long");
+      goto clean;
+    }
+
   /* XXX no subdirs.  */
   filename = strndup (buf, PATH_MAX);
   if (!filename)
